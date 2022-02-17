@@ -7,8 +7,8 @@ package cmd
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
+	"todo_CLI_client/table"
 
 	//"io/ioutil"
 	"log"
@@ -17,10 +17,12 @@ import (
 
 	"github.com/spf13/cobra"
 )
+
 type JsonTask struct {
-	Priority int `json:"priority"`
-	Data string `json:"task"`
+	Priority int    `json:"priority"`
+	Data     string `json:"task"`
 }
+
 // newCmd represents the new command
 var newCmd = &cobra.Command{
 	Use:   "new",
@@ -29,12 +31,12 @@ var newCmd = &cobra.Command{
 		task := args[0]
 		priority, _ := strconv.Atoi(args[1])
 		newTask := JsonTask{
-			Data: task,
+			Data:     task,
 			Priority: priority,
 		}
 		postBody, _ := json.MarshalIndent(newTask, "", "  ")
 		responseBody := bytes.NewBuffer(postBody)
-		resp, err := http.Post("http://localhost:8080/tasks","application/json", responseBody)
+		resp, err := http.Post("http://localhost:8080/tasks", "application/json", responseBody)
 		if err != nil {
 			log.Fatalf("An Error Occured %v", err)
 		}
@@ -44,8 +46,11 @@ var newCmd = &cobra.Command{
 		if err != nil {
 			log.Fatalln(err)
 		}
-		sb := string(body)
-		fmt.Println("Response: ",sb)
+
+		results := []table.JsonTask{}
+		json.Unmarshal(body, &results)
+
+		table.Print(results)
 	},
 }
 

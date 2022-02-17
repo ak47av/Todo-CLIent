@@ -5,10 +5,12 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"todo_CLI_client/table"
 
 	"github.com/spf13/cobra"
 )
@@ -32,14 +34,16 @@ var deleteCmd = &cobra.Command{
 			return
 		}
 		defer resp.Body.Close()
-		
-		bodyBytes, err := ioutil.ReadAll(resp.Body)
+
+		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			fmt.Println(err)
-			return
+			log.Fatalln(err)
 		}
-		bodyString := string(bodyBytes)
-		fmt.Println(bodyString)
+
+		results := []table.JsonTask{}
+		json.Unmarshal(body, &results)
+
+		table.Print(results)
 	},
 }
 
