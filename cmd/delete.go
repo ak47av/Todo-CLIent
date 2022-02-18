@@ -22,7 +22,7 @@ var deleteCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		index := args[0]
 		client := &http.Client{}
-		req, err := http.NewRequest("DELETE", fmt.Sprintf("http://localhost:8080/tasks/%s", index), nil)
+		req, err := http.NewRequest("DELETE", fmt.Sprintf("http://192.168.0.2:8080/tasks/%s", index), nil)
 		if err != nil {
 			log.Fatalln(err)
 			return

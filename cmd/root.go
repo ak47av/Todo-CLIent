@@ -24,7 +24,7 @@ var rootCmd = &cobra.Command{
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	Run: func(cmd *cobra.Command, args []string) {
-		resp, err := http.Get("http://localhost:8080/tasks")
+		resp, err := http.Get("http://192.168.0.2:8080/tasks")
 		if err != nil {
 			log.Fatalln(err)
 		}
